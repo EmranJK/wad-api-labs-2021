@@ -5,7 +5,7 @@ import './db';
 import './seedData';
 import usersRouter from './api/users';
 import session from 'express-session';
-import authenticate from './authenticate';
+import passport from './authenticate';
 
 dotenv.config();
 
@@ -28,20 +28,16 @@ app.use(express.json());
 //app.use('/api/movies', moviesRouter);
 
 //session middleware
-app.use(session({
-  secret: 'ilikecake',
-  resave: true,
-  saveUninitialized: true
-}));
+app.use(passport.initialize());
+
+//Users router
+app.use('/api/users', usersRouter);
+
+app.use(errHandler);
+
+app.use('/api/movies', passport.authenticate('jwt', {session: false}), moviesRouter);
 
 app.listen(port, () => {
   console.info(`Server running at ${port}`);
 });
 
-//Users router
-app.use('/api/users', usersRouter);
-
-//update /api/Movie route
-app.use('/api/movies', authenticate, moviesRouter);
-
-app.use(errHandler);
