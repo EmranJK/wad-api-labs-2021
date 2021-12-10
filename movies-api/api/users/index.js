@@ -18,7 +18,8 @@ router.get('/', async (req, res) => {
 // Register OR authenticate a user
 router.post('/',asyncHandler( async (req, res, next) => {
 
-  const regex = new RegExp('^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$');
+  const regex = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/);
+
   // !regex.test(req.body.password)
     if (!req.body.username || !req.body.password) {
       res.status(401).json({success: false, msg: 'Please pass username and password.'});
